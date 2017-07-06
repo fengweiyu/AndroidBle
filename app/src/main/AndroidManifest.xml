@@ -17,8 +17,12 @@
             </intent-filter>
         </activity>
             <activity android:name=".BluetoothActivity"/>
-            <activity android:name=".HandProtocolActivity"/>
-            <activity android:name=".LogActivity">
+            <activity
+                android:name=".HandProtocolActivity"
+                android:launchMode="singleTask"/>
+            <activity
+                android:name=".LogActivity"
+                android:launchMode="singleTask">
 
         </activity>
     </application>

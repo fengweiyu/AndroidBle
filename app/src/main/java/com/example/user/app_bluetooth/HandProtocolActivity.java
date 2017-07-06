@@ -66,6 +66,11 @@ public class HandProtocolActivity extends Activity
 	Context mContext;
 	private Handler pGetParaHandler=null;
 	private boolean blJumpToLog=false;
+	private ViewParaThread mViewPara=null;
+	private RecvDataThread mRecvData=null;
+
+
+	
 	
 	private Spinner spnWorkMode=null;
 	private static final String[] strWorkMode = { "TCP", "UDP" }; //定义数组
@@ -199,6 +204,12 @@ public class HandProtocolActivity extends Activity
 			// TODO Auto-generated method stub
 		}
 	}
+	@Override
+	public void onBackPressed()
+	{
+		Intent in=new Intent(HandProtocolActivity.this,LogActivity.class);
+		startActivity(in);
+	}
 	protected void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
@@ -250,15 +261,30 @@ public class HandProtocolActivity extends Activity
 		super.onResume();
 		pGetParaHandler = new Handler(new ReadParaHandler()); 
 		
-		ViewParaThread mViewPara=new ViewParaThread(); 
+		mViewPara=new ViewParaThread(); 
 		mViewPara.start();
-		RecvDataThread mRecvData=new RecvDataThread(); 
+		mRecvData=new RecvDataThread(); 
 		mRecvData.start();
 	}
 	@Override
 	protected void onDestroy()
 	{
-
+	    if(null==mViewPara)
+	    {
+	    }
+	    else
+	    {
+		mViewPara.interrupt();
+		mViewPara=null;
+	    }
+	    if(null==mRecvData)
+	    {
+	    }
+	    else
+	    {
+		mRecvData.interrupt();
+		mRecvData=null;
+	    }
 	    super.onDestroy();
 	}//发送数据
 	private class ReadParaHandler implements Handler.Callback
@@ -267,6 +293,7 @@ public class HandProtocolActivity extends Activity
 		{
 			String s1=new String((String) msg.obj);
 			String s2=new String(s1.toCharArray(),1,s1.toCharArray().length-1);
+			Log.i("ReadParaHandler", "handleMessage"+msg.what);
 			switch(msg.what)
 			{
 				case HandProtocolInfo.HandProtocolSubCmdId.OWN_NUMBER:
@@ -329,7 +356,7 @@ public class HandProtocolActivity extends Activity
 				{
 					ViewPara mViewPara=(ViewPara)GetParaQueue.ViewParaQueue.take();
 					Message msgPara = new Message();
-					String s=new  String(mViewPara.GetDataBuf());//
+					String s=new  String(mViewPara.GetDataBuf());//					
 					msgPara.obj =s;
 					msgPara.what = mViewPara.GetCmdId();
 					

@@ -11,9 +11,10 @@
         android:layout_height="wrap_content"
         android:id="@+id/editTextMainGprs"
         android:hint="主GPRS参数"
-        android:layout_alignBottom="@+id/buttonGetMainGprs"
         android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetMainGprs" />
+        android:layout_toStartOf="@+id/buttonGetMainGprs"
+        android:layout_alignBottom="@+id/buttonGetMainGprs"
+        android:layout_alignParentTop="true"/>
 
     <Button
         android:layout_width="wrap_content"
