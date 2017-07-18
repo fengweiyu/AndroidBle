@@ -351,9 +351,14 @@ class GetParameter extends HandProtocolHandleMenu
 ******************************************************************************/
 class GetFunctionState extends HandProtocolHandleMenu
 {
+	private List listFunctionStateMenu;
 	GetFunctionState()
 	{
 		super.setCmd(HandProtocolInfo.READ_FUNCTION_STATE_OPR_CMD);
+		//construct FunctionStateMenu
+		this.listFunctionStateMenu = Collections.synchronizedList(new LinkedList());
+		GetFixedReportTime mGetFixedReportTime=new GetFixedReportTime();
+		this.listFunctionStateMenu.add(mGetFixedReportTime);
 	}
 	/*****************************************************************************
 	-Fuction		: handleProtocol
@@ -369,9 +374,24 @@ class GetFunctionState extends HandProtocolHandleMenu
 	{
 		byte bSubCmdId=i_pbDataBuf[0];
 		boolean blRet=false;
-
-		
-		return blRet;
+		int i;
+		HandProtocolGetPara mGetParam;
+		byte[] pbBuf=new byte[i_iLen-1];//Uncontain SubCmd
+		System.arraycopy(i_pbDataBuf,1,pbBuf,0,i_iLen-1);
+		for(i=0;i<listFunctionStateMenu.size();i++)
+		{
+			mGetParam=(HandProtocolGetPara)listFunctionStateMenu.get(i);
+			
+			//Log.i("GetParameter", "handleProtocol" +bSubCmdId+Arrays.toString(i_pbDataBuf)+mGetParam.getSubCmd());
+			if(bSubCmdId==mGetParam.getSubCmd())
+			{
+				blRet=mGetParam.getPara(pbBuf,i_iLen-1);
+			}
+			else
+			{
+			}
+		}
+		return blRet; 
 	}
 }
 

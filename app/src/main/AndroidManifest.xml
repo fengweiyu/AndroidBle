@@ -19,10 +19,10 @@
             <activity android:name=".BluetoothActivity"/>
             <activity
                 android:name=".HandProtocolActivity"
-                android:launchMode="singleTask"/>
+                android:launchMode="singleInstance"/>
             <activity
                 android:name=".LogActivity"
-                android:launchMode="singleTask">
+                android:launchMode="singleInstance">
 
         </activity>
     </application>

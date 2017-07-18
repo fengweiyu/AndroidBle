@@ -269,6 +269,7 @@ public class HandProtocolActivity extends Activity
 	@Override
 	protected void onDestroy()
 	{
+	    Log.i("HandProtocolActivity", "onDestroy");
 	    if(null==mViewPara)
 	    {
 	    }
@@ -298,35 +299,75 @@ public class HandProtocolActivity extends Activity
 			{
 				case HandProtocolInfo.HandProtocolSubCmdId.OWN_NUMBER:
 				{
-					etOwnNumView.setText(s2);
+					int i=s2.length()-1;
+					for(i=s2.length()-1;i>=0;i--)
+					{
+						if(s2.charAt(i)>0x39)
+						{
+						}
+						else
+						{
+							break;
+						}
+					}
+					String s3=new String(s2.toCharArray(),0,i);
+					etOwnNumView.setText(s3);
 					break;
 				}
 				case HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT:
 				{
+					int i=s2.length()-1;
+					for(i=s2.length()-1;i>=0;i--)
+					{
+						if(s2.charAt(i)=='F')
+						{
+						}
+						else
+						{
+							break;
+						}
+					}
+					String s3=new String(s2.toCharArray(),0,i+1);
 					if('0'==s1.charAt(0))
 					{
-						etMainGprsView.setText(s2);
+						etMainGprsView.setText(s3);
 					}
 					else
 					{
-						etBackupGprsView.setText(s2);
+						etBackupGprsView.setText(s3);
 					}
 
 					break;
 				}
 				case HandProtocolInfo.HandProtocolSubCmdId.APN_NAME:
 				{
+					int i=s2.length()-1;
+					for(i=s2.length()-1;i>=0;i--)
+					{
+						if(s2.charAt(i)=='F')
+						{
+						}
+						else
+						{
+							break;
+						}
+					}
+					String s3=new String(s2.toCharArray(),0,i+1);
 					if('0'==s1.charAt(0))
 					{
-						etMainApnView.setText(s2);
+						etMainApnView.setText(s3);
 					}
 					else
 					{
-						etBackupApnView.setText(s2);
+						etBackupApnView.setText(s3);
 					}
 					break;
 				}
+				case HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM:
+				{
 
+					break;
+				}
 				default:
 				{
 					Log.i("ReadParaHandler", "handleMessage err"+msg.what);
@@ -693,6 +734,57 @@ public class HandProtocolActivity extends Activity
 				Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
 			}
 		}
+		
+
+		/*****************************************************************************
+		-Fuction		: setBackupApn
+		-Description	: setBackupApn
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void setFixedReportTime()
+		{
+			byte bCmd=HandProtocolInfo.SEND_FUNCTION_STATE_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			String inputText=etBackupApnView.getText().toString();
+			char cReportTime=0;
+			byte bDatabuf[]=new byte[4];
+			try
+			{
+				cReportTime=(char)Integer.parseInt(inputText);
+				bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
+				bDatabuf[1]=HandProtocolInfo.SET_PARA;
+				bDatabuf[2]=(byte)(cReportTime&0x00ff);
+				bDatabuf[3]=(byte)(cReportTime>>8&0x00ff);
+				byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+				if (inputText.length()>0) 
+				{
+					HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+					iSendDataLen[0]=0;
+					try
+					{
+						mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);						
+						mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+					}catch(Exception e)
+					{
+						Log.i("ParaOprListener", "setMainApn err"+e);
+					}finally{
+					}
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+				}
+			}
+			catch(NumberFormatException  e)
+			{
+
+			}
+		}
 	}
 	/*****************************************************************************
 	-Class			: ParaGet
@@ -861,6 +953,40 @@ public class HandProtocolActivity extends Activity
 			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.APN_NAME;
 			bDatabuf[1]=HandProtocolInfo.GET_PARA;
 			bDatabuf[2]=HandProtocolInfo.SIM_CARD_1;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}
+			catch(Exception e)
+			{
+				Log.i("ParaOprListener", "getMainGprs err"+e);
+			}finally
+			{
+			}
+		}
+		
+		/*****************************************************************************
+		-Fuction		: getBackupApn
+		-Description	: getBackupApn
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void getFixedReportTime()
+		{
+			byte bCmd=HandProtocolInfo.SEND_FUNCTION_STATE_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
+			bDatabuf[1]=HandProtocolInfo.GET_PARA;
 			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
 			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
 			iSendDataLen[0]=0;
