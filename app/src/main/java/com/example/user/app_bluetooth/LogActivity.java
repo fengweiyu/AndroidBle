@@ -16,6 +16,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
@@ -23,11 +24,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
+import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -45,6 +52,7 @@ public class LogActivity extends Activity
 {
 	Context mContext;
 	private TextView tvLogView=null;
+	private EditText etSendText=null;
 	private Button btEnableLog=null;
 	private Button btSaveLog=null;
 	private Button btClearLog=null;
@@ -80,7 +88,7 @@ public class LogActivity extends Activity
 				}
 				case R.id.buttonSaveLog:
 				{
-
+					saveLog(tvLogView.getText().toString());
 					break;
 				}
 				case R.id.buttonClearLog:
@@ -90,8 +98,15 @@ public class LogActivity extends Activity
 				}
 				case R.id.buttonLogSend:
 				{
-					String s=new String("@@@");
-					BluetoothMsg.BleRemoteDevice.write(s.getBytes());
+					String inputText=etSendText.getText().toString();
+					if(inputText.length()>0)
+					{
+					}
+					else
+					{
+						inputText=new String("@@@");
+					}
+					BluetoothMsg.BleRemoteDevice.write(inputText.getBytes());
 					break;
 				}
 				default:
@@ -127,6 +142,7 @@ public class LogActivity extends Activity
 		setContentView(R.layout.log_activity);
 		mContext = this;
 		tvLogView = (TextView) findViewById(R.id.textViewLog);
+		etSendText = (EditText) findViewById(R.id.editTextSendContext);
 		btEnableLog = (Button) findViewById(R.id.buttonEnableLog);
 		btEnableLog.setOnClickListener(new LogListener());
 		btSaveLog = (Button) findViewById(R.id.buttonSaveLog);
@@ -156,7 +172,33 @@ public class LogActivity extends Activity
 
 	    super.onDestroy();
 	}
-	
+	private void saveLog(String i_strLog)
+	{
+		String filePath = null;
+		boolean hasSDCard = Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED);
+		if (hasSDCard) { // SD卡根目录的hello.text
+			filePath = Environment.getExternalStorageDirectory().toString() + File.separator + "BleToolLog.txt";
+		} else  // 系统下载缓存根目录的hello.text
+			filePath = Environment.getDownloadCacheDirectory().toString() + File.separator + "BleToolLog.txt";
+		try
+		{
+			File file = new File(filePath);
+			if (!file.exists()) {
+				File dir = new File(file.getParent());
+				dir.mkdirs();
+				file.createNewFile();
+			}
+			FileOutputStream outStream = new FileOutputStream(file,true);
+			//FileOutputStream outStream=openFileOutput("BleToolLog.txt",Context.MODE_APPEND);
+			BufferedWriter mWriter=new BufferedWriter(new OutputStreamWriter(outStream));
+			mWriter.write(i_strLog);
+			mWriter.close();
+		}
+		catch (IOException e)
+		{
+			Log.i("LogActivity", "saveLog err"+e);
+		}
+	}
 	private class ReadLogHandler implements Handler.Callback
 	{
 		public boolean handleMessage(Message msg)

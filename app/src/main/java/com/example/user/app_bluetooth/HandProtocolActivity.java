@@ -328,13 +328,27 @@ public class HandProtocolActivity extends Activity
 						}
 					}
 					String s3=new String(s2.toCharArray(),0,i+1);
+					char strArray[]=s3.toCharArray();
+					for(i=s3.length()-5-1;i>=0;i--)
+					{
+						if(s3.charAt(i)=='F')
+						{
+						}
+						else
+						{
+							strArray[i+1]=',';
+							break;
+						}
+					}
+					String s4=new String(strArray,0,i+1+1);
+					s4=s4.concat(new String(s3.toCharArray(),s3.length()-5,5));
 					if('0'==s1.charAt(0))
 					{
-						etMainGprsView.setText(s3);
+						etMainGprsView.setText(s4);
 					}
 					else
 					{
-						etBackupGprsView.setText(s3);
+						etBackupGprsView.setText(s4);
 					}
 
 					break;
