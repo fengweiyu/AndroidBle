@@ -22,7 +22,7 @@
                 android:launchMode="singleInstance"/>
             <activity
                 android:name=".LogActivity"
-                android:launchMode="singleInstance">
+                android:launchMode="singleTask">
 
         </activity>
     </application>
