@@ -242,11 +242,11 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="初始化"
-        android:id="@+id/buttonInit"
-        android:layout_below="@+id/editTextCityID"
+        android:text="清除"
+        android:id="@+id/buttonClear"
         android:layout_alignParentStart="true"
-        android:layout_alignEnd="@+id/buttonNextActivity"/>
+        android:layout_toStartOf="@+id/buttonInit"
+        android:layout_alignParentBottom="true"/>
 
     <Button
         android:layout_width="wrap_content"
@@ -260,10 +260,36 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="清除"
-        android:id="@+id/buttonClear"
+        android:text="初始化"
+        android:id="@+id/buttonInit"
         android:layout_alignParentBottom="true"
         android:layout_toStartOf="@+id/buttonNextActivity"/>
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextTerminalID"
+        android:hint="终端ID"
+        android:layout_below="@+id/editTextCityID"
+        android:layout_alignParentStart="true"
+        android:layout_toStartOf="@+id/buttonInit"
+        android:layout_alignBottom="@+id/buttonGetTerminalID"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设置"
+        android:id="@+id/buttonSetTerminalID"
+        android:layout_below="@+id/editTextCityID"
+        android:layout_alignParentEnd="true"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="读取"
+        android:id="@+id/buttonGetTerminalID"
+        android:layout_toStartOf="@+id/buttonSetCityID"
+        android:layout_below="@+id/buttonGetCityID"/>
 
 
 </RelativeLayout>

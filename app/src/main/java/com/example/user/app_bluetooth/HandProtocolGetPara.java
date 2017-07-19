@@ -189,6 +189,46 @@ class GetMainApn extends HandProtocolGetPara
 	}
 }
 /*****************************************************************************
+-Class			: GetWorkMode
+-Description	: 
+* Modify Date	  Version		 Author 		  Modification
+* -----------------------------------------------
+* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+******************************************************************************/
+class GetWorkMode extends HandProtocolGetPara
+{
+	GetWorkMode()
+	{
+		super.setSubCmd(HandProtocolInfo.HandProtocolSubCmdId.WORKMODE);
+	}
+	/*****************************************************************************
+	-Fuction		: getPara
+	-Description	: Override
+	-Input			: 
+	-Output 		: 
+	-Return 		: 
+	* Modify Date	  Version		 Author 		  Modification
+	* -----------------------------------------------
+	* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+	******************************************************************************/
+	public boolean getPara(byte[] i_pbDataBuf,int i_iLen)
+	{
+		boolean blRet;
+		//Log.i("GetOwnNumber","getPara"+Arrays.toString(i_pbDataBuf)+i_pbDataBuf.length);
+		ViewPara mViewPara=new ViewPara(HandProtocolInfo.HandProtocolSubCmdId.WORKMODE,i_pbDataBuf);
+		try
+		{
+			GetParaQueue.ViewParaQueue.put(mViewPara);
+		}catch(InterruptedException e)
+		{
+			Log.i("GetWorkMode","Exception:"+e);
+		}
+		blRet=true;
+		return blRet;
+	}
+}
+
+/*****************************************************************************
 -Class			: GetMainApn
 -Description	: 
 * Modify Date	  Version		 Author 		  Modification

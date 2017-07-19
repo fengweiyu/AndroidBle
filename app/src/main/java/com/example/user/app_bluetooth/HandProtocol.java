@@ -54,6 +54,9 @@ public class HandProtocol extends Protocol
 		listHandleMenu = Collections.synchronizedList(new LinkedList());
 		GetParameter mGetPara=new GetParameter();
 		listHandleMenu.add(mGetPara);
+		
+		GetFunctionState mGetFunctionState=new GetFunctionState();
+		listHandleMenu.add(mGetFunctionState);
 	}
 	/*****************************************************************************
 	-Fuction		: checkData
@@ -307,6 +310,9 @@ class GetParameter extends HandProtocolHandleMenu
 
 		GetMainApn mGetMainApn=new GetMainApn();
 		listGetParamMenu.add(mGetMainApn);
+
+		GetWorkMode mGetWorkMode=new GetWorkMode();
+		listGetParamMenu.add(mGetWorkMode);
 	}
 	/*****************************************************************************
 	-Fuction		: handleProtocol

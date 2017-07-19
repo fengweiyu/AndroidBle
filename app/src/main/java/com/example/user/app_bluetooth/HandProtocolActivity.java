@@ -70,11 +70,12 @@ public class HandProtocolActivity extends Activity
 	private RecvDataThread mRecvData=null;
 
 
-	
-	
 	private Spinner spnWorkMode=null;
 	private static final String[] strWorkMode = { "TCP", "UDP" }; //定义数组
-
+	private int iWorkMode=0;
+	private Button btGetWorkMode=null;
+	private Button btSetWorkMode=null;
+	
 	private Button btGetOwnNum=null;
 	private Button btSetOwnNum=null;
 	private EditText etOwnNumView=null;
@@ -94,6 +95,10 @@ public class HandProtocolActivity extends Activity
 	private Button btGetBackupApn=null;
 	private Button btSetBackupApn=null;
 	private EditText etBackupApnView=null;	
+
+	private Button btGetFixReport=null;
+	private Button btSetFixReport=null;
+	private EditText etFixReportView=null;
 	/*****************************************************************************
 	-Class			: ParaOprListener
 	-Description	: 
@@ -106,73 +111,87 @@ public class HandProtocolActivity extends Activity
 		@Override
 		public void onClick(View v)
 		{
+			ParaGet mGetPara=new ParaGet();
+			ParaSet mSetPara=new ParaSet();
 			switch(v.getId())
 			{
-
 				case R.id.buttonGetOwnNumber:
 				{
-					ParaGet mGetPara=new ParaGet();
 					mGetPara.getOwnNum();
 					break;
 				}
 				case R.id.buttonSetOwnNumber:
 				{
-					ParaSet mSetPara=new ParaSet();
 					mSetPara.setOwnNum();
 					break;
 				}
 				
 				case R.id.buttonGetMainGprs:
 				{
-					ParaGet mGetPara=new ParaGet();
 					mGetPara.getMainGprs();
 					break;
 				}
 				case R.id.buttonSetMainGprs:
 				{
-					ParaSet mSetPara=new ParaSet();
 					mSetPara.setMainGprs();
 					break;
 				}
 				
 				case R.id.buttonGetMainApn:
 				{
-					ParaGet mGetPara=new ParaGet();
 					mGetPara.getMainApn();
 					break;
 				}
 				case R.id.buttonSetMainApn:
 				{
-					ParaSet mSetPara=new ParaSet();
 					mSetPara.setMainApn();
 					break;
 				}
 				
 				case R.id.buttonGetBackupGprs:
 				{
-					ParaGet mGetPara=new ParaGet();
 					mGetPara.getBackupGprs();
 					break;
 				}
 				case R.id.buttonSetBackupGprs:
 				{
-					ParaSet mSetPara=new ParaSet();
 					mSetPara.setBackupGprs();
 					break;
 				}
 				
 				case R.id.buttonGetBackupApn:
 				{
-					ParaGet mGetPara=new ParaGet();
 					mGetPara.getBackupApn();
 					break;
 				}
 				case R.id.buttonSetBackupApn:
 				{
-					ParaSet mSetPara=new ParaSet();
 					mSetPara.setBackupApn();
 					break;
-				}				
+				}		
+				
+				case R.id.buttonGetWorkMode:
+				{
+					mGetPara.getWorkMode();
+					break;
+				}
+				case R.id.buttonSetWorkMode:
+				{
+					mSetPara.setWorkMode();
+					break;
+				}		
+				
+				case R.id.buttonGetFixReport:
+				{
+					mGetPara.getFixedReportTime();
+					break;
+				}
+				case R.id.buttonSetFixReport:
+				{
+					mSetPara.setFixedReportTime();
+					break;
+				}	
+				
 				default:
 				{
 					Log.i("ParaOprListener", "onClick err");
@@ -195,6 +214,7 @@ public class HandProtocolActivity extends Activity
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
 		{
 				String cardNumber = strWorkMode[arg2];
+				iWorkMode=arg2;
 				//设置显示当前选择的项
 				arg0.setVisibility(View.VISIBLE);
 		}
@@ -246,14 +266,21 @@ public class HandProtocolActivity extends Activity
 		btSetBackupApn.setOnClickListener(new ParaOprListener());
 		etBackupApnView = (EditText) findViewById(R.id.editTextBackupApn);
 
-
-
-		
+		btGetWorkMode = (Button) findViewById(R.id.buttonGetWorkMode);
+		btGetWorkMode.setOnClickListener(new ParaOprListener());
+		btSetWorkMode = (Button) findViewById(R.id.buttonSetWorkMode);
+		btSetWorkMode.setOnClickListener(new ParaOprListener());
 		spnWorkMode =(Spinner)findViewById(R.id.spinnerWorkMode);
 		spnWorkMode.setPrompt("工作模式:");
 		ArrayAdapter<String> adapterWrokMode=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strWorkMode);
 		spnWorkMode.setAdapter(adapterWrokMode);
 		spnWorkMode.setOnItemSelectedListener(new SpinnerOprListener());
+
+		btGetFixReport = (Button) findViewById(R.id.buttonGetFixReport);
+		btGetFixReport.setOnClickListener(new ParaOprListener());
+		btSetFixReport = (Button) findViewById(R.id.buttonSetFixReport);
+		btSetFixReport.setOnClickListener(new ParaOprListener());
+		etFixReportView = (EditText) findViewById(R.id.editTextFixReport);
 	}
 	@Override
 	protected  void onResume()
@@ -292,7 +319,8 @@ public class HandProtocolActivity extends Activity
 	{
 		public boolean handleMessage(Message msg)
 		{
-			String s1=new String((String) msg.obj);
+			byte bHandleBuf[] =Arrays.copyOf((byte []) msg.obj,((byte[]) msg.obj).length);
+			String s1=new String(bHandleBuf);
 			String s2=new String(s1.toCharArray(),1,s1.toCharArray().length-1);
 			Log.i("ReadParaHandler", "handleMessage"+msg.what);
 			switch(msg.what)
@@ -300,7 +328,8 @@ public class HandProtocolActivity extends Activity
 				case HandProtocolInfo.HandProtocolSubCmdId.OWN_NUMBER:
 				{
 					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
+					for(i=s2.length()-1;i>=0;i--)
+
 					{
 						if(s2.charAt(i)>0x39)
 						{
@@ -314,10 +343,12 @@ public class HandProtocolActivity extends Activity
 					etOwnNumView.setText(s3);
 					break;
 				}
+				
 				case HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT:
 				{
 					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
+					for(i=s2.length()-1;i>=0;i--)
+
 					{
 						if(s2.charAt(i)=='F')
 						{
@@ -329,7 +360,8 @@ public class HandProtocolActivity extends Activity
 					}
 					String s3=new String(s2.toCharArray(),0,i+1);
 					char strArray[]=s3.toCharArray();
-					for(i=s3.length()-5-1;i>=0;i--)
+					for(i=s3.length()-5-1;i>=0;i--)
+
 					{
 						if(s3.charAt(i)=='F')
 						{
@@ -353,10 +385,12 @@ public class HandProtocolActivity extends Activity
 
 					break;
 				}
+				
 				case HandProtocolInfo.HandProtocolSubCmdId.APN_NAME:
 				{
 					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
+					for(i=s2.length()-1;i>=0;i--)
+
 					{
 						if(s2.charAt(i)=='F')
 						{
@@ -377,11 +411,41 @@ public class HandProtocolActivity extends Activity
 					}
 					break;
 				}
-				case HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM:
+				
+				case HandProtocolInfo.HandProtocolSubCmdId.WORKMODE:
 				{
-
+					if(bHandleBuf[0]==2)//TCP
+					{
+						spnWorkMode.setSelection(0);
+					}
+					else if(bHandleBuf[0]==1)//UCP
+					{
+						spnWorkMode.setSelection(1);
+					}
+					else
+					{
+						Log.i("ReadParaHandler", "spnWorkMode err"+Arrays.toString(bHandleBuf));
+					}
 					break;
 				}
+				
+				case HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM:
+				{
+					
+					//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bHandleBuf));
+					String strFixedNum=null;
+					if(bHandleBuf[1]<=0)
+					{
+						strFixedNum=""+bHandleBuf[0];
+					}
+					else
+					{
+						strFixedNum=""+(bHandleBuf[1]*16*16+bHandleBuf[0]);
+					}
+					etFixReportView.setText(strFixedNum);
+					break;
+				}
+				
 				default:
 				{
 					Log.i("ReadParaHandler", "handleMessage err"+msg.what);
@@ -411,10 +475,9 @@ public class HandProtocolActivity extends Activity
 				{
 					ViewPara mViewPara=(ViewPara)GetParaQueue.ViewParaQueue.take();
 					Message msgPara = new Message();
-					String s=new  String(mViewPara.GetDataBuf());//					
-					msgPara.obj =s;
+					msgPara.obj =mViewPara.GetDataBuf();
 					msgPara.what = mViewPara.GetCmdId();
-					
+					//Log.i("ViewParaThread", "run"+Arrays.toString(mViewPara.GetDataBuf()));
 					pGetParaHandler.sendMessage(msgPara);
 					/*switch(mViewPara.GetCmdId())
 					{
@@ -504,6 +567,7 @@ public class HandProtocolActivity extends Activity
 					}
 					else
 					{
+						//Log.i("RecvDataThread", "checkData"+Arrays.toString(s_pbGetDataBuf));
 						HandProtocol mHandProtocol=new HandProtocol(s_pbGetDataBuf,(byte)1);
 						if(false==mHandProtocol.checkData())
 						{
@@ -571,7 +635,7 @@ public class HandProtocolActivity extends Activity
 					mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
 				}catch(Exception e)
 				{
-					Log.i("ParaOprListener", "setOwnNumpackData err"+e);
+					Log.i("ParaSet", "setOwnNumpackData err"+e);
 				}finally{
 				}
 			}
@@ -613,7 +677,7 @@ public class HandProtocolActivity extends Activity
 					mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
 				}catch(Exception e)
 				{
-					Log.i("ParaOprListener", "setMainGprs err"+e);
+					Log.i("ParaSet", "setMainGprs err"+e);
 				}finally{
 				}
 			}
@@ -655,7 +719,7 @@ public class HandProtocolActivity extends Activity
 					mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
 				}catch(Exception e)
 				{
-					Log.i("ParaOprListener", "setMainApn err"+e);
+					Log.i("ParaSet", "setMainApn err"+e);
 				}finally{
 				}
 			}
@@ -697,7 +761,7 @@ public class HandProtocolActivity extends Activity
 					mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
 				}catch(Exception e)
 				{
-					Log.i("ParaOprListener", "setMainGprs err"+e);
+					Log.i("ParaSet", "setMainGprs err"+e);
 				}finally{
 				}
 			}
@@ -739,7 +803,7 @@ public class HandProtocolActivity extends Activity
 					mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
 				}catch(Exception e)
 				{
-					Log.i("ParaOprListener", "setMainApn err"+e);
+					Log.i("ParaSet", "setMainApn err"+e);
 				}finally{
 				}
 			}
@@ -748,7 +812,49 @@ public class HandProtocolActivity extends Activity
 				Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
 			}
 		}
-		
+
+		/*****************************************************************************
+		-Fuction		: setWorkMode
+		-Description	: setWorkMode
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void setWorkMode()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bWorkMode=0;
+			byte bDatabuf[]=new byte[3];
+
+			if(iWorkMode==0)
+			{
+				bWorkMode=(byte)2;//TCP
+			}
+			else
+			{
+				bWorkMode=(byte)1;//UDP
+			}
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.WORKMODE;
+			bDatabuf[1]=HandProtocolInfo.SET_PARA;
+			bDatabuf[2]=bWorkMode;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);						
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}catch(Exception e)
+			{
+				Log.i("ParaSet", "setWorkMode err"+e);
+			}finally{
+			}
+		}
 
 		/*****************************************************************************
 		-Fuction		: setBackupApn
@@ -764,12 +870,12 @@ public class HandProtocolActivity extends Activity
 		{
 			byte bCmd=HandProtocolInfo.SEND_FUNCTION_STATE_OPR_CMD;
 			int iSendDataLen[]=new int[1];
-			String inputText=etBackupApnView.getText().toString();
+			String inputText=etFixReportView.getText().toString();
 			char cReportTime=0;
 			byte bDatabuf[]=new byte[4];
 			try
 			{
-				cReportTime=(char)Integer.parseInt(inputText);
+				cReportTime=(char)Integer.parseInt(inputText,10);
 				bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
 				bDatabuf[1]=HandProtocolInfo.SET_PARA;
 				bDatabuf[2]=(byte)(cReportTime&0x00ff);
@@ -781,11 +887,12 @@ public class HandProtocolActivity extends Activity
 					iSendDataLen[0]=0;
 					try
 					{
-						mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);						
-						mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+						mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+						mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
+						//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bSendDatabuf));
 					}catch(Exception e)
 					{
-						Log.i("ParaOprListener", "setMainApn err"+e);
+						Log.i("ParaSet", "setFixedReportTime err"+e);
 					}finally{
 					}
 				}
@@ -838,7 +945,7 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getOwnNumpackData err"+e);
+				Log.i("ParaGet", "getOwnNumpackData err"+e);
 			}finally
 			{
 			}
@@ -872,7 +979,7 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getMainGprs err"+e);
+				Log.i("ParaGet", "getMainGprs err"+e);
 			}finally
 			{
 			}
@@ -907,7 +1014,7 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getMainGprs err"+e);
+				Log.i("ParaGet", "getMainGprs err"+e);
 			}finally
 			{
 			}
@@ -942,7 +1049,7 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getMainGprs err"+e);
+				Log.i("ParaGet", "getMainGprs err"+e);
 			}finally
 			{
 			}
@@ -977,12 +1084,46 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getMainGprs err"+e);
+				Log.i("ParaGet", "getMainGprs err"+e);
 			}finally
 			{
 			}
 		}
 		
+		
+		/*****************************************************************************
+		-Fuction		: getWorkMode
+		-Description	: getWorkMode
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void getWorkMode()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.WORKMODE;
+			bDatabuf[1]=HandProtocolInfo.GET_PARA;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}
+			catch(Exception e)
+			{
+				Log.i("ParaGet", "getWorkMode err"+e);
+			}finally
+			{
+			}
+		}
 		/*****************************************************************************
 		-Fuction		: getBackupApn
 		-Description	: getBackupApn
@@ -998,7 +1139,6 @@ public class HandProtocolActivity extends Activity
 			byte bCmd=HandProtocolInfo.SEND_FUNCTION_STATE_OPR_CMD;
 			int iSendDataLen[]=new int[1];
 			byte bDatabuf[]=new byte[2];
-			
 			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
 			bDatabuf[1]=HandProtocolInfo.GET_PARA;
 			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
@@ -1006,12 +1146,12 @@ public class HandProtocolActivity extends Activity
 			iSendDataLen[0]=0;
 			try
 			{
-				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
-				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+				mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
 			}
 			catch(Exception e)
 			{
-				Log.i("ParaOprListener", "getMainGprs err"+e);
+				Log.i("ParaGet", "getFixedReportTime err"+e);
 			}finally
 			{
 			}

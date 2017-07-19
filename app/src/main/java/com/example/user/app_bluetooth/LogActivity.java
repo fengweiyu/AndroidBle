@@ -35,7 +35,9 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.UUID;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
@@ -88,7 +90,11 @@ public class LogActivity extends Activity
 				}
 				case R.id.buttonSaveLog:
 				{
-					saveLog(tvLogView.getText().toString());
+					SimpleDateFormat formatter = new SimpleDateFormat ("-----yyyy年MM月dd日 HH:mm:ss-----\r\n");
+					Date curDate    =   new Date(System.currentTimeMillis());//获取当前时间
+					String strSaveLog = formatter.format(curDate);
+					strSaveLog=strSaveLog.concat(tvLogView.getText().toString());
+					saveLog(strSaveLog);
 					break;
 				}
 				case R.id.buttonClearLog:
