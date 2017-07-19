@@ -99,6 +99,18 @@ public class HandProtocolActivity extends Activity
 	private Button btGetFixReport=null;
 	private Button btSetFixReport=null;
 	private EditText etFixReportView=null;
+	
+	private Button btGetProvinceID=null;
+	private Button btSetProvinceID=null;
+	private EditText etProvinceIDView=null;
+
+	private Button btGetCityID=null;
+	private Button btSetCityID=null;
+	private EditText etCityIDView=null;
+
+	private Button btGetTerminalID=null;
+	private Button btSetTerminalID=null;
+	private EditText etTerminalIDView=null;
 	/*****************************************************************************
 	-Class			: ParaOprListener
 	-Description	: 
@@ -192,6 +204,39 @@ public class HandProtocolActivity extends Activity
 					break;
 				}	
 				
+				case R.id.buttonGetProvinceID:
+				{
+					mGetPara.getProvinceID();
+					break;
+				}
+				case R.id.buttonSetProvinceID:
+				{
+					mSetPara.setProvinceID();
+					break;
+				}	
+
+				case R.id.buttonGetCityID:
+				{
+					mGetPara.getCityID();
+					break;
+				}
+				case R.id.buttonSetCityID:
+				{
+					mSetPara.setCityID();
+					break;
+				}	
+
+				case R.id.buttonGetTerminalID:
+				{
+					mGetPara.getTerminalID();
+					break;
+				}
+				case R.id.buttonSetTerminalID:
+				{
+					mSetPara.setTerminalID();
+					break;
+				}	
+				
 				default:
 				{
 					Log.i("ParaOprListener", "onClick err");
@@ -281,6 +326,29 @@ public class HandProtocolActivity extends Activity
 		btSetFixReport = (Button) findViewById(R.id.buttonSetFixReport);
 		btSetFixReport.setOnClickListener(new ParaOprListener());
 		etFixReportView = (EditText) findViewById(R.id.editTextFixReport);
+
+		btGetProvinceID = (Button) findViewById(R.id.buttonGetProvinceID);
+		btGetProvinceID.setOnClickListener(new ParaOprListener());
+		btSetProvinceID = (Button) findViewById(R.id.buttonSetProvinceID);
+		btSetProvinceID.setOnClickListener(new ParaOprListener());
+		etProvinceIDView = (EditText) findViewById(R.id.editTextProvinceID);
+		
+		btGetCityID = (Button) findViewById(R.id.buttonGetCityID);
+		btGetCityID.setOnClickListener(new ParaOprListener());
+		btSetCityID = (Button) findViewById(R.id.buttonSetCityID);
+		btSetCityID.setOnClickListener(new ParaOprListener());
+		etCityIDView = (EditText) findViewById(R.id.editTextCityID);
+		
+		btGetTerminalID = (Button) findViewById(R.id.buttonGetTerminalID);
+		btGetTerminalID.setOnClickListener(new ParaOprListener());
+		btSetTerminalID = (Button) findViewById(R.id.buttonSetTerminalID);
+		btSetTerminalID.setOnClickListener(new ParaOprListener());
+		etTerminalIDView = (EditText) findViewById(R.id.editTextTerminalID);
+
+
+
+
+		
 	}
 	@Override
 	protected  void onResume()
@@ -446,6 +514,45 @@ public class HandProtocolActivity extends Activity
 					break;
 				}
 				
+				case HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID:
+				{
+					
+					Log.i("ReadParaHandler", "etProvinceIDView"+Arrays.toString(bHandleBuf));
+					String strFixedNum=null;
+					if(bHandleBuf[1]<=0)
+					{
+						strFixedNum=""+bHandleBuf[0];
+					}
+					else
+					{
+						strFixedNum=""+(bHandleBuf[1]*16*16+bHandleBuf[0]);
+					}
+					etProvinceIDView.setText(strFixedNum);
+					break;
+				}
+				
+				case HandProtocolInfo.HandProtocolSubCmdId.CITY_ID:
+				{
+					
+					Log.i("ReadParaHandler", "etCityIDView"+Arrays.toString(bHandleBuf));
+					String strFixedNum=null;
+					if(bHandleBuf[1]<=0)
+					{
+						strFixedNum=""+bHandleBuf[0];
+					}
+					else
+					{
+						strFixedNum=""+(bHandleBuf[1]*16*16+bHandleBuf[0]);
+					}
+					etCityIDView.setText(strFixedNum);
+					break;
+				}
+				
+				case HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID:
+				{
+					etTerminalIDView.setText(s1);
+					break;
+				}
 				default:
 				{
 					Log.i("ReadParaHandler", "handleMessage err"+msg.what);
@@ -875,14 +982,14 @@ public class HandProtocolActivity extends Activity
 			byte bDatabuf[]=new byte[4];
 			try
 			{
-				cReportTime=(char)Integer.parseInt(inputText,10);
-				bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
-				bDatabuf[1]=HandProtocolInfo.SET_PARA;
-				bDatabuf[2]=(byte)(cReportTime&0x00ff);
-				bDatabuf[3]=(byte)(cReportTime>>8&0x00ff);
-				byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
 				if (inputText.length()>0) 
 				{
+					cReportTime=(char)Integer.parseInt(inputText,10);
+					bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM;
+					bDatabuf[1]=HandProtocolInfo.SET_PARA;
+					bDatabuf[2]=(byte)(cReportTime&0x00ff);
+					bDatabuf[3]=(byte)(cReportTime>>8&0x00ff);
+					byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
 					HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
 					iSendDataLen[0]=0;
 					try
@@ -903,9 +1010,155 @@ public class HandProtocolActivity extends Activity
 			}
 			catch(NumberFormatException  e)
 			{
-
+				Log.i("ParaSet", "setFixedReportTime err"+e);
 			}
 		}
+
+		/*****************************************************************************
+		-Fuction		: setProvinceID
+		-Description	: setProvinceID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void setProvinceID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			String inputText=etProvinceIDView.getText().toString();
+			char cProvinceID=0;
+			byte bDatabuf[]=new byte[4];
+			try
+			{
+				if (inputText.length()>0) 
+				{
+					cProvinceID=(char)Integer.parseInt(inputText,10);
+					bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID;
+					bDatabuf[1]=HandProtocolInfo.SET_PARA;
+					bDatabuf[2]=(byte)(cProvinceID&0x00ff);
+					bDatabuf[3]=(byte)(cProvinceID>>8&0x00ff);
+					byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+					HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+					iSendDataLen[0]=0;
+					try
+					{
+						mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+						mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
+						//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bSendDatabuf));
+					}catch(Exception e)
+					{
+						Log.i("ParaSet", "setProvinceID err"+e);
+					}finally{
+					}
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+				}
+			}
+			catch(NumberFormatException  e)
+			{
+				Log.i("ParaSet", "setProvinceID err"+e);
+			}
+		}
+
+		/*****************************************************************************
+		-Fuction		: setCityID
+		-Description	: setCityID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void setCityID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			String inputText=etCityIDView.getText().toString();
+			char cCityID=0;
+			byte bDatabuf[]=new byte[4];
+			try
+			{
+				if (inputText.length()>0) 
+				{
+					cCityID=(char)Integer.parseInt(inputText,10);
+					bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CITY_ID;
+					bDatabuf[1]=HandProtocolInfo.SET_PARA;
+					bDatabuf[2]=(byte)(cCityID&0x00ff);
+					bDatabuf[3]=(byte)(cCityID>>8&0x00ff);
+					byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+					HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+					iSendDataLen[0]=0;
+					try
+					{
+						mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+						mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
+						//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bSendDatabuf));
+					}catch(Exception e)
+					{
+						Log.i("ParaSet", "setCityID err"+e);
+					}finally{
+					}
+				}
+				else
+				{
+					Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+				}
+			}
+			catch(NumberFormatException  e)
+			{
+				Log.i("ParaSet", "setCityID err"+e);
+			}
+		}
+
+		/*****************************************************************************
+		-Fuction		: setTerminalID
+		-Description	: setTerminalID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void setTerminalID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			String inputText=etTerminalIDView.getText().toString();
+			byte bDatabuf[]=new byte[inputText.getBytes().length+2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID;
+			bDatabuf[1]=HandProtocolInfo.SET_PARA;
+			System.arraycopy(inputText.getBytes(),0,bDatabuf,2,inputText.getBytes().length);
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			if (inputText.length()>0) 
+			{
+				HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+				iSendDataLen[0]=0;
+				try
+				{
+					mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+					mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
+					//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bSendDatabuf));
+				}catch(Exception e)
+				{
+					Log.i("ParaSet", "setTerminalID err"+e);
+				}finally{
+				}
+			}
+			else
+			{
+				Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+			}
+		}
+
+		
 	}
 	/*****************************************************************************
 	-Class			: ParaGet
@@ -1152,6 +1405,108 @@ public class HandProtocolActivity extends Activity
 			catch(Exception e)
 			{
 				Log.i("ParaGet", "getFixedReportTime err"+e);
+			}finally
+			{
+			}
+		}
+			
+		/*****************************************************************************
+		-Fuction		: getProvinceID
+		-Description	: getProvinceID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void getProvinceID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID;
+			bDatabuf[1]=HandProtocolInfo.GET_PARA;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}
+			catch(Exception e)
+			{
+				Log.i("ParaGet", "getProvinceID err"+e);
+			}finally
+			{
+			}
+		}
+				
+		/*****************************************************************************
+		-Fuction		: getCityID
+		-Description	: getCityID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void getCityID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CITY_ID;
+			bDatabuf[1]=HandProtocolInfo.GET_PARA;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}
+			catch(Exception e)
+			{
+				Log.i("ParaGet", "getCityID err"+e);
+			}finally
+			{
+			}
+		}
+				
+		/*****************************************************************************
+		-Fuction		: getTerminalID
+		-Description	: getTerminalID
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void getTerminalID()
+		{
+			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID;
+			bDatabuf[1]=HandProtocolInfo.GET_PARA;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd,bDatabuf,bDatabuf.length,bSendDatabuf,iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf,iSendDataLen[0]);
+			}
+			catch(Exception e)
+			{
+				Log.i("ParaGet", "getTerminalID err"+e);
 			}finally
 			{
 			}

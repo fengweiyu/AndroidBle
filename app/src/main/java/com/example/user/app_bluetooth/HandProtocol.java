@@ -246,6 +246,10 @@ class HandProtocolInfo
 		public static final byte  LISTEN_NUM1 					=(byte)0x18;		//�������ĺ���1//
 		public static final byte  SOS_NUM 						=(byte)0x19;		//SOS����//
 		public static final byte  SERIAL_NUM					=(byte)0x20;		//�������к�//
+		public static final byte  PROVINCE_ID					=(byte)0x28;		
+		public static final byte  CITY_ID						=(byte)0x29;
+		public static final byte  TERMINAL_ID					=(byte)0x2C;
+
 		public static final byte  TRANSFER_INTERVAL			=(byte)0x4e;		//����OBD����͸���ϴ����//
 		public static final byte  OEMID						=(byte)0x50; 	 	// �豸���̴���
 		public static final byte  LICENSE_PLATE				=(byte)0x46;		// ���ƺ���
@@ -313,6 +317,16 @@ class GetParameter extends HandProtocolHandleMenu
 
 		GetWorkMode mGetWorkMode=new GetWorkMode();
 		listGetParamMenu.add(mGetWorkMode);
+
+		GetProvinceID mGetProvinceID=new GetProvinceID();
+		listGetParamMenu.add(mGetProvinceID);
+
+		GetCityID mGetCityID=new GetCityID();
+		listGetParamMenu.add(mGetCityID);
+		
+		GetTerminalID mGetTerminalID=new GetTerminalID();
+		listGetParamMenu.add(mGetTerminalID);
+		
 	}
 	/*****************************************************************************
 	-Fuction		: handleProtocol

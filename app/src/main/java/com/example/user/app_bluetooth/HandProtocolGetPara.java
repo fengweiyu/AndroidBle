@@ -265,3 +265,114 @@ class GetFixedReportTime extends HandProtocolGetPara
 	}
 }
 
+/*****************************************************************************
+-Class			: GetMainApn
+-Description	: 
+* Modify Date	  Version		 Author 		  Modification
+* -----------------------------------------------
+* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+******************************************************************************/
+class GetProvinceID extends HandProtocolGetPara
+{
+	GetProvinceID(){super.setSubCmd(HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID);}
+	/*****************************************************************************
+	-Fuction		: getPara
+	-Description	: Override
+	-Input			: 
+	-Output 		: 
+	-Return 		: 
+	* Modify Date	  Version		 Author 		  Modification
+	* -----------------------------------------------
+	* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+	******************************************************************************/
+	public boolean getPara(byte[] i_pbDataBuf,int i_iLen)
+	{
+		boolean blRet;
+		//Log.i("GetOwnNumber","getPara"+Arrays.toString(i_pbDataBuf)+i_pbDataBuf.length);
+		ViewPara mViewPara=new ViewPara(HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID,i_pbDataBuf);
+		try
+		{
+			GetParaQueue.ViewParaQueue.put(mViewPara);
+		}catch(InterruptedException e)
+		{
+			Log.i("GetProvinceID","Exception:"+e);
+		}
+		blRet=true;
+		return blRet;
+	}
+}
+
+/*****************************************************************************
+-Class			: GetMainApn
+-Description	: 
+* Modify Date	  Version		 Author 		  Modification
+* -----------------------------------------------
+* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+******************************************************************************/
+class GetCityID extends HandProtocolGetPara
+{
+	GetCityID(){super.setSubCmd(HandProtocolInfo.HandProtocolSubCmdId.CITY_ID);}
+	/*****************************************************************************
+	-Fuction		: getPara
+	-Description	: Override
+	-Input			: 
+	-Output 		: 
+	-Return 		: 
+	* Modify Date	  Version		 Author 		  Modification
+	* -----------------------------------------------
+	* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+	******************************************************************************/
+	public boolean getPara(byte[] i_pbDataBuf,int i_iLen)
+	{
+		boolean blRet;
+		//Log.i("GetOwnNumber","getPara"+Arrays.toString(i_pbDataBuf)+i_pbDataBuf.length);
+		ViewPara mViewPara=new ViewPara(HandProtocolInfo.HandProtocolSubCmdId.CITY_ID,i_pbDataBuf);
+		try
+		{
+			GetParaQueue.ViewParaQueue.put(mViewPara);
+		}catch(InterruptedException e)
+		{
+			Log.i("GetCityID","Exception:"+e);
+		}
+		blRet=true;
+		return blRet;
+	}
+}
+
+/*****************************************************************************
+-Class			: GetMainApn
+-Description	: 
+* Modify Date	  Version		 Author 		  Modification
+* -----------------------------------------------
+* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+******************************************************************************/
+class GetTerminalID extends HandProtocolGetPara
+{
+	GetTerminalID(){super.setSubCmd(HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID);}
+	/*****************************************************************************
+	-Fuction		: getPara
+	-Description	: Override
+	-Input			: 
+	-Output 		: 
+	-Return 		: 
+	* Modify Date	  Version		 Author 		  Modification
+	* -----------------------------------------------
+	* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+	******************************************************************************/
+	public boolean getPara(byte[] i_pbDataBuf,int i_iLen)
+	{
+		boolean blRet;
+		//Log.i("GetOwnNumber","getPara"+Arrays.toString(i_pbDataBuf)+i_pbDataBuf.length);
+		ViewPara mViewPara=new ViewPara(HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID,i_pbDataBuf);
+		try
+		{
+			GetParaQueue.ViewParaQueue.put(mViewPara);
+		}catch(InterruptedException e)
+		{
+			Log.i("GetTerminalID","Exception:"+e);
+		}
+		blRet=true;
+		return blRet;
+	}
+}
+
