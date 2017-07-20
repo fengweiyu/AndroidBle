@@ -111,6 +111,10 @@ public class HandProtocolActivity extends Activity
 	private Button btGetTerminalID=null;
 	private Button btSetTerminalID=null;
 	private EditText etTerminalIDView=null;
+
+	
+	private Button btClear=null;
+	private Button btInit=null;
 	/*****************************************************************************
 	-Class			: ParaOprListener
 	-Description	: 
@@ -236,6 +240,17 @@ public class HandProtocolActivity extends Activity
 					mSetPara.setTerminalID();
 					break;
 				}	
+
+				case R.id.buttonInit:
+				{
+					mSetPara.FactoryReset();
+					break;
+				}
+				case R.id.buttonClear:
+				{
+					ClearPara();
+					break;
+				}	
 				
 				default:
 				{
@@ -345,9 +360,10 @@ public class HandProtocolActivity extends Activity
 		btSetTerminalID.setOnClickListener(new ParaOprListener());
 		etTerminalIDView = (EditText) findViewById(R.id.editTextTerminalID);
 
-
-
-
+		btClear = (Button) findViewById(R.id.buttonClear);
+		btClear.setOnClickListener(new ParaOprListener());
+		btInit = (Button) findViewById(R.id.buttonInit);
+		btInit.setOnClickListener(new ParaOprListener());
 		
 	}
 	@Override
@@ -383,23 +399,129 @@ public class HandProtocolActivity extends Activity
 	    }
 	    super.onDestroy();
 	}//发送数据
+	private void ClearPara()
+	{
+		etOwnNumView.setText(null);
+		etMainApnView.setText(null);
+		etBackupApnView.setText(null);
+		etBackupGprsView.setText(null);
+		etMainGprsView.setText(null);
+		etFixReportView.setText(null);
+		etProvinceIDView.setText(null);
+		etCityIDView.setText(null);
+		etTerminalIDView.setText(null);
+		spnWorkMode.setSelection(0);
+	}
+	private int GetLengthExceptF(String i_strSrc)
+	{
+		int i=i_strSrc.length()-1;
+		for(i=i_strSrc.length()-1;i>=0;i--)
+		{
+			if(i_strSrc.charAt(i)=='F')
+			{
+			}
+			else
+			{
+				break;
+			}
+		}
+		return i+1;
+	}
+	private String GetStringF(int i_iCount)
+	{
+		String strF="";
+		if(i_iCount<=0)
+		{
+		}
+		else
+		{
+			char cF[]=new char[i_iCount];
+			int i;
+			for(i=0;i<i_iCount;i++)
+			{
+				cF[i]='F';
+			}
+			strF=new String(cF);
+		}
+		return strF;
+	}
+	private boolean GetInputGprsPara(String i_strSrc,String []o_strDst)
+	{
+		boolean blRet=false;
+		int iLocation;
+		int iIpLen=0;
+		int iPortLen=0;
+		int iUsrNameLen=0;
+		int iPasswordLen=0;
+		int iOffset;
+		String strIp="";
+		String strPort="";
+		String strUserName="";
+		String strPassword="";
+		iLocation=i_strSrc.indexOf(',');
+		if((-1==iLocation)||(15<iLocation))
+		{
+			  Log.i("HandProtocolActivity", "strIpGetInputGprsPara"+iLocation);
+		}
+		else 
+		{
+			iIpLen=iLocation;
+			iOffset=iIpLen+1;
+			iLocation=i_strSrc.indexOf(',',iLocation+1);
+			if((-1==iLocation)||((iOffset+5)<iLocation))
+			{
+				  Log.i("HandProtocolActivity", "strPortGetInputGprsPara"+iLocation);
+			}
+			else
+			{
+				iPortLen=iLocation-iOffset;
+				iOffset+=iPortLen+1;
+				iLocation=i_strSrc.indexOf(',',iLocation+1);
+				if((-1==iLocation)||(iOffset+20<iLocation))
+				{
+				  	Log.i("HandProtocolActivity", "strUserNameGetInputGprsPara"+iLocation);
+				}
+				else
+				{
+					iUsrNameLen=iLocation-iOffset;
+					iPasswordLen=i_strSrc.length()-iLocation-1;
+					blRet=true;
+				}
+			}
+		}
+		if(false==blRet)
+		{
+		}
+		else
+		{
+			if(iIpLen>0)
+			strIp=new String(i_strSrc.toCharArray(),0,iIpLen);
+			if(iPortLen>0)
+			strPort=new String(i_strSrc.toCharArray(),iIpLen+1,iPortLen);
+			if(iUsrNameLen>0)
+			strUserName=new String(i_strSrc.toCharArray(),iIpLen+1+iPortLen+1,iUsrNameLen);
+			if(iPasswordLen>0)
+			strPassword=new String(i_strSrc.toCharArray(),iIpLen+1+iPortLen+1+iUsrNameLen+1,iPasswordLen);
+			o_strDst[0]=strIp+GetStringF(15-iIpLen)+strPort+GetStringF(5-iPortLen)+strUserName+GetStringF(20-iUsrNameLen)+strPassword+GetStringF(20-iPasswordLen);
+		}
+		return blRet;
+	}
 	private class ReadParaHandler implements Handler.Callback
 	{
 		public boolean handleMessage(Message msg)
 		{
 			byte bHandleBuf[] =Arrays.copyOf((byte []) msg.obj,((byte[]) msg.obj).length);
-			String s1=new String(bHandleBuf);
-			String s2=new String(s1.toCharArray(),1,s1.toCharArray().length-1);
+			String strSrc=new String(bHandleBuf);
+			String strSrcExceptSimCard=new String(strSrc.toCharArray(),1,strSrc.toCharArray().length-1);
 			Log.i("ReadParaHandler", "handleMessage"+msg.what);
 			switch(msg.what)
 			{
 				case HandProtocolInfo.HandProtocolSubCmdId.OWN_NUMBER:
 				{
-					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
-
+					int i=strSrcExceptSimCard.length()-1;
+					for(i=strSrcExceptSimCard.length()-1;i>=0;i--)
 					{
-						if(s2.charAt(i)>0x39)
+						if(strSrcExceptSimCard.charAt(i)>0x39)
 						{
 						}
 						else
@@ -407,48 +529,37 @@ public class HandProtocolActivity extends Activity
 							break;
 						}
 					}
-					String s3=new String(s2.toCharArray(),0,i);
-					etOwnNumView.setText(s3);
+					try{
+						String strOwnNum=new String(strSrcExceptSimCard.toCharArray(),0,i+1);
+						etOwnNumView.setText(strOwnNum);
+					}
+					catch (IndexOutOfBoundsException e)
+					{
+						Log.i("ReadParaHandler", "etOwnNumView err"+e);
+					}
 					break;
 				}
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT:
 				{
-					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
+					String strIp=new String(strSrcExceptSimCard.toCharArray(),0,15);
+					String strPort=new String(strSrcExceptSimCard.toCharArray(),15,5);
+					String strUsrName=new String(strSrcExceptSimCard.toCharArray(),20,20);
+					String strPassword=new String(strSrcExceptSimCard.toCharArray(),40,20);
+					
+					strIp=new String(strIp.toCharArray(),0,GetLengthExceptF(strIp));
+					strPort=new String(strPort.toCharArray(),0,GetLengthExceptF(strPort));
+					strUsrName=new String(strUsrName.toCharArray(),0,GetLengthExceptF(strUsrName));
+					strPassword=new String(strPassword.toCharArray(),0,GetLengthExceptF(strPassword));
 
+					String strGprs=strIp+','+strPort+','+strUsrName+','+strPassword;
+					if('0'==strSrc.charAt(0))
 					{
-						if(s2.charAt(i)=='F')
-						{
-						}
-						else
-						{
-							break;
-						}
-					}
-					String s3=new String(s2.toCharArray(),0,i+1);
-					char strArray[]=s3.toCharArray();
-					for(i=s3.length()-5-1;i>=0;i--)
-
-					{
-						if(s3.charAt(i)=='F')
-						{
-						}
-						else
-						{
-							strArray[i+1]=',';
-							break;
-						}
-					}
-					String s4=new String(strArray,0,i+1+1);
-					s4=s4.concat(new String(s3.toCharArray(),s3.length()-5,5));
-					if('0'==s1.charAt(0))
-					{
-						etMainGprsView.setText(s4);
+						etMainGprsView.setText(strGprs);
 					}
 					else
 					{
-						etBackupGprsView.setText(s4);
+						etBackupGprsView.setText(strGprs);
 					}
 
 					break;
@@ -456,11 +567,10 @@ public class HandProtocolActivity extends Activity
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.APN_NAME:
 				{
-					int i=s2.length()-1;
-					for(i=s2.length()-1;i>=0;i--)
-
+					int i=strSrcExceptSimCard.length()-1;
+					for(i=strSrcExceptSimCard.length()-1;i>=0;i--)
 					{
-						if(s2.charAt(i)=='F')
+						if(strSrcExceptSimCard.charAt(i)=='F')
 						{
 						}
 						else
@@ -468,14 +578,14 @@ public class HandProtocolActivity extends Activity
 							break;
 						}
 					}
-					String s3=new String(s2.toCharArray(),0,i+1);
-					if('0'==s1.charAt(0))
+					String strApn=new String(strSrcExceptSimCard.toCharArray(),0,i+1);
+					if('0'==strSrc.charAt(0))
 					{
-						etMainApnView.setText(s3);
+						etMainApnView.setText(strApn);
 					}
 					else
 					{
-						etBackupApnView.setText(s3);
+						etBackupApnView.setText(strApn);
 					}
 					break;
 				}
@@ -499,8 +609,6 @@ public class HandProtocolActivity extends Activity
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.FIXED_NUM:
 				{
-					
-					//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bHandleBuf));
 					String strFixedNum=null;
 					if(bHandleBuf[1]<=0)
 					{
@@ -516,8 +624,6 @@ public class HandProtocolActivity extends Activity
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.PROVINCE_ID:
 				{
-					
-					Log.i("ReadParaHandler", "etProvinceIDView"+Arrays.toString(bHandleBuf));
 					String strFixedNum=null;
 					if(bHandleBuf[1]<=0)
 					{
@@ -532,9 +638,8 @@ public class HandProtocolActivity extends Activity
 				}
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.CITY_ID:
-				{
-					
-					Log.i("ReadParaHandler", "etCityIDView"+Arrays.toString(bHandleBuf));
+				{		
+					//Log.i("ReadParaHandler", "etCityIDView"+Arrays.toString(bHandleBuf));
 					String strFixedNum=null;
 					if(bHandleBuf[1]<=0)
 					{
@@ -550,7 +655,7 @@ public class HandProtocolActivity extends Activity
 				
 				case HandProtocolInfo.HandProtocolSubCmdId.TERMINAL_ID:
 				{
-					etTerminalIDView.setText(s1);
+					etTerminalIDView.setText(strSrc);
 					break;
 				}
 				default:
@@ -766,16 +871,16 @@ public class HandProtocolActivity extends Activity
 		{
 			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
 			int iSendDataLen[]=new int[1];
-			String inputtext=etMainGprsView.getText().toString();
-			byte bDatabuf[]=new byte[inputtext.getBytes().length+3];
-			
-			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT;
-			bDatabuf[1]=HandProtocolInfo.SET_PARA;
-			bDatabuf[2]=HandProtocolInfo.SIM_CARD_0;
-			System.arraycopy(inputtext.getBytes(),0,bDatabuf,3,inputtext.getBytes().length);
-			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
-			if (inputtext.length()>0) 
+			String strInputText=etMainGprsView.getText().toString();
+			String [] SendText={"SendText"};
+			if (true==GetInputGprsPara(strInputText,SendText)) 
 			{
+				byte bDatabuf[]=new byte[SendText[0].getBytes().length+3];
+				bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT;
+				bDatabuf[1]=HandProtocolInfo.SET_PARA;
+				bDatabuf[2]=HandProtocolInfo.SIM_CARD_0;
+				System.arraycopy(SendText[0].getBytes(),0,bDatabuf,3,SendText[0].getBytes().length);
+				byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
 				HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
 				iSendDataLen[0]=0;
 				try
@@ -790,7 +895,7 @@ public class HandProtocolActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "发送格式错误!例:Ip,Port,UserName,Password", Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -850,16 +955,16 @@ public class HandProtocolActivity extends Activity
 		{
 			byte bCmd=HandProtocolInfo.SEND_PARA_OPR_CMD;
 			int iSendDataLen[]=new int[1];
-			String inputtext=etBackupGprsView.getText().toString();
-			byte bDatabuf[]=new byte[inputtext.getBytes().length+3];
-			
-			bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT;
-			bDatabuf[1]=HandProtocolInfo.SET_PARA;
-			bDatabuf[2]=HandProtocolInfo.SIM_CARD_1;
-			System.arraycopy(inputtext.getBytes(),0,bDatabuf,3,inputtext.getBytes().length);
-			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
-			if (inputtext.length()>0) 
+			String strInputText=etBackupGprsView.getText().toString();
+			String [] SendText={"SendText"};
+			if (true==GetInputGprsPara(strInputText,SendText)) 
 			{
+				byte bDatabuf[]=new byte[SendText[0].getBytes().length+3];
+				bDatabuf[0]=HandProtocolInfo.HandProtocolSubCmdId.CENTRE_IP_PORT;
+				bDatabuf[1]=HandProtocolInfo.SET_PARA;
+				bDatabuf[2]=HandProtocolInfo.SIM_CARD_1;
+				System.arraycopy(SendText[0].getBytes(),0,bDatabuf,3,SendText[0].getBytes().length);
+				byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
 				HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
 				iSendDataLen[0]=0;
 				try
@@ -874,7 +979,7 @@ public class HandProtocolActivity extends Activity
 			}
 			else
 			{
-				Toast.makeText(getApplicationContext(), "发送内容不能为空！", Toast.LENGTH_SHORT).show();
+				Toast.makeText(getApplicationContext(), "发送格式错误!例:Ip,Port,UserName,Password", Toast.LENGTH_SHORT).show();
 			}
 		}
 
@@ -1158,6 +1263,38 @@ public class HandProtocolActivity extends Activity
 			}
 		}
 
+		/*****************************************************************************
+		-Fuction		: FactoryReset
+		-Description	: DefaultInit
+		-Input			: 
+		-Output 		: 
+		-Return 		: 
+		* Modify Date	  Version		 Author 		  Modification
+		* -----------------------------------------------
+		* 2017/06/22	  V1.0.0		 Yu Weifeng 	  Created
+		******************************************************************************/
+		public  void FactoryReset()
+		{
+			byte bCmd=HandProtocolInfo.SEND_FUNCTION_STATE_OPR_CMD;
+			int iSendDataLen[]=new int[1];
+			byte bDatabuf[]=new byte[2];
+			
+			bDatabuf[0]=HandProtocolInfo.HandProtocolFunSubCmdId.FACTORY_SET;
+			bDatabuf[1]=HandProtocolInfo.SET_PARA;
+			byte bSendDatabuf[]=new byte[bDatabuf.length+HandProtocolInfo.BASE_LEN];
+			HandProtocol mHandProtocol=new HandProtocol(bDatabuf,(byte)1);
+			iSendDataLen[0]=0;
+			try
+			{
+				mHandProtocol.packData(bCmd, bDatabuf, bDatabuf.length, bSendDatabuf, iSendDataLen);
+				mHandProtocol.sendData(bSendDatabuf, iSendDataLen[0]);
+				//Log.i("ParaSet", "setFixedReportTime"+Arrays.toString(bSendDatabuf));
+			}catch(Exception e)
+			{
+				Log.i("ParaSet", "FactoryReset err"+e);
+			}finally{
+			}
+		}
 		
 	}
 	/*****************************************************************************
