@@ -1,295 +1,323 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:orientation="vertical"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent">
 
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:weightSum="1">
+        <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:layout_width="match_parent"
+            android:layout_height="592dp"
+            android:weightSum="1">
 
-    <EditText
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextMainGprs"
-        android:hint="主GPRS参数"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetMainGprs"
-        android:layout_alignBottom="@+id/buttonGetMainGprs"
-        android:layout_alignParentTop="true"/>
+            <EditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextMainGprs"
+                android:hint="主GPRS参数"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetMainGprs"
+                android:layout_alignBottom="@+id/buttonGetMainGprs"
+                android:layout_alignParentTop="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetMainGprs"
-        android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/buttonSetMainGprs" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetMainGprs"
+                android:layout_alignParentTop="true"
+                android:layout_toStartOf="@+id/buttonSetMainGprs" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetMainGprs"
-        android:layout_alignBottom="@+id/editTextMainGprs"
-        android:layout_alignParentEnd="true" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetMainGprs"
+                android:layout_alignBottom="@+id/editTextMainGprs"
+                android:layout_alignParentEnd="true" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetMainApn"
-        android:layout_below="@+id/buttonSetMainGprs"
-        android:layout_alignStart="@+id/buttonSetMainGprs" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetMainApn"
+                android:layout_below="@+id/buttonSetMainGprs"
+                android:layout_alignStart="@+id/buttonSetMainGprs" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextMainApn"
-        android:layout_alignBottom="@+id/buttonSetMainApn"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetMainGprs"
-        android:hint="主APN" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextMainApn"
+                android:layout_alignBottom="@+id/buttonSetMainApn"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetMainGprs"
+                android:hint="主APN" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetMainApn"
-        android:layout_below="@+id/editTextMainGprs"
-        android:layout_toStartOf="@+id/buttonSetMainGprs" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetMainApn"
+                android:layout_below="@+id/editTextMainGprs"
+                android:layout_toStartOf="@+id/buttonSetMainGprs" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextBackupGprs"
-        android:layout_below="@+id/editTextMainApn"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetMainApn"
-        android:hint="备份GPRS参数"
-        android:layout_alignBottom="@+id/buttonGetBackupGprs" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextBackupGprs"
+                android:layout_below="@+id/editTextMainApn"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetMainApn"
+                android:hint="备份GPRS参数"
+                android:layout_alignBottom="@+id/buttonGetBackupGprs" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetBackupGprs"
-        android:layout_below="@+id/buttonSetMainApn"
-        android:layout_toEndOf="@+id/editTextBackupGprs" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetBackupGprs"
+                android:layout_below="@+id/buttonSetMainApn"
+                android:layout_toEndOf="@+id/editTextBackupGprs" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetBackupGprs"
-        android:layout_alignBottom="@+id/buttonGetBackupGprs"
-        android:layout_toEndOf="@+id/buttonGetBackupGprs" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetBackupGprs"
+                android:layout_alignBottom="@+id/buttonGetBackupGprs"
+                android:layout_toEndOf="@+id/buttonGetBackupGprs" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextBackupApn"
-        android:layout_below="@+id/editTextBackupGprs"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetBackupGprs"
-        android:layout_alignBottom="@+id/buttonGetBackupApn"
-        android:hint="备份APN" />
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextBackupApn"
+                android:layout_below="@+id/editTextBackupGprs"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetBackupGprs"
+                android:layout_alignBottom="@+id/buttonGetBackupApn"
+                android:hint="备份APN" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetBackupApn"
-        android:layout_below="@+id/editTextBackupGprs"
-        android:layout_toEndOf="@+id/editTextBackupApn" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetBackupApn"
+                android:layout_below="@+id/editTextBackupGprs"
+                android:layout_toEndOf="@+id/editTextBackupApn" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetBackupApn"
-        android:layout_alignBottom="@+id/buttonGetBackupApn"
-        android:layout_toEndOf="@+id/buttonGetBackupApn"
-        android:layout_alignStart="@+id/buttonSetBackupGprs"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetBackupApn"
+                android:layout_alignBottom="@+id/buttonGetBackupApn"
+                android:layout_toEndOf="@+id/buttonGetBackupApn"
+                android:layout_alignStart="@+id/buttonSetBackupGprs"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextOwnNumber"
-        android:layout_below="@+id/editTextBackupApn"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetBackupApn"
-        android:hint="本机号码"
-        android:layout_alignBottom="@+id/buttonGetOwnNumber"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextOwnNumber"
+                android:layout_below="@+id/editTextBackupApn"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetBackupApn"
+                android:hint="本机号码"
+                android:layout_alignBottom="@+id/buttonGetOwnNumber"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetOwnNumber"
-        android:layout_below="@+id/editTextBackupApn"
-        android:layout_toEndOf="@+id/editTextBackupApn" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetOwnNumber"
+                android:layout_below="@+id/editTextBackupApn"
+                android:layout_toEndOf="@+id/editTextBackupApn" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetOwnNumber"
-        android:layout_alignBottom="@+id/buttonGetOwnNumber"
-        android:layout_toEndOf="@+id/buttonGetOwnNumber" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetOwnNumber"
+                android:layout_alignBottom="@+id/buttonGetOwnNumber"
+                android:layout_toEndOf="@+id/buttonGetOwnNumber" />
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerWorkMode"
-        android:spinnerMode="dialog"
-        android:layout_below="@+id/editTextOwnNumber"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetWorkMode"/>
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerWorkMode"
+                android:spinnerMode="dialog"
+                android:layout_below="@+id/editTextOwnNumber"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetWorkMode"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetWorkMode"
-        android:layout_alignTop="@+id/spinnerWorkMode"
-        android:layout_toStartOf="@+id/buttonSetOwnNumber"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetWorkMode"
+                android:layout_alignTop="@+id/spinnerWorkMode"
+                android:layout_toStartOf="@+id/buttonSetOwnNumber"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetWorkMode"
-        android:layout_alignTop="@+id/buttonGetWorkMode"
-        android:layout_alignParentEnd="true"
-        android:layout_toEndOf="@+id/buttonGetWorkMode"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetWorkMode"
+                android:layout_alignTop="@+id/buttonGetWorkMode"
+                android:layout_alignParentEnd="true"
+                android:layout_toEndOf="@+id/buttonGetWorkMode"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextFixReport"
-        android:layout_below="@+id/buttonGetWorkMode"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetWorkMode"
-        android:hint="固定上传间隔(Unit: s)"
-        android:layout_alignBottom="@+id/buttonGetFixReport"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextFixReport"
+                android:layout_below="@+id/buttonGetWorkMode"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetWorkMode"
+                android:hint="固定上传间隔(Unit: s)"
+                android:layout_alignBottom="@+id/buttonGetFixReport"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetFixReport"
-        android:layout_below="@+id/buttonGetWorkMode"
-        android:layout_toEndOf="@+id/spinnerWorkMode"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetFixReport"
+                android:layout_below="@+id/buttonGetWorkMode"
+                android:layout_toEndOf="@+id/spinnerWorkMode"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetFixReport"
-        android:layout_alignBottom="@+id/buttonGetFixReport"
-        android:layout_toEndOf="@+id/buttonGetWorkMode"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetFixReport"
+                android:layout_alignBottom="@+id/buttonGetFixReport"
+                android:layout_toEndOf="@+id/buttonGetWorkMode"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextProvinceID"
-        android:layout_below="@+id/editTextFixReport"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetFixReport"
-        android:hint="省域ID"
-        android:layout_alignBottom="@+id/buttonGetProvinceID"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextProvinceID"
+                android:layout_below="@+id/editTextFixReport"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetFixReport"
+                android:hint="省域ID"
+                android:layout_alignBottom="@+id/buttonGetProvinceID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetProvinceID"
-        android:layout_below="@+id/editTextFixReport"
-        android:layout_toEndOf="@+id/editTextProvinceID"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetProvinceID"
+                android:layout_below="@+id/editTextFixReport"
+                android:layout_toEndOf="@+id/editTextProvinceID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetProvinceID"
-        android:layout_below="@+id/buttonGetFixReport"
-        android:layout_toEndOf="@+id/buttonGetProvinceID"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetProvinceID"
+                android:layout_below="@+id/buttonGetFixReport"
+                android:layout_toEndOf="@+id/buttonGetProvinceID"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextCityID"
-        android:layout_below="@+id/editTextProvinceID"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonGetProvinceID"
-        android:hint="市县域ID"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextCityID"
+                android:layout_below="@+id/editTextProvinceID"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetProvinceID"
+                android:hint="市县域ID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetCityID"
-        android:layout_alignBottom="@+id/editTextCityID"
-        android:layout_toEndOf="@+id/editTextProvinceID"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetCityID"
+                android:layout_alignBottom="@+id/editTextCityID"
+                android:layout_toEndOf="@+id/editTextProvinceID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetCityID"
-        android:layout_alignBottom="@+id/editTextCityID"
-        android:layout_alignParentEnd="true"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetCityID"
+                android:layout_alignBottom="@+id/editTextCityID"
+                android:layout_alignParentEnd="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="清除"
-        android:id="@+id/buttonClear"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonInit"
-        android:layout_alignParentBottom="true"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="清除"
+                android:id="@+id/buttonClear"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonInit"
+                android:layout_alignParentBottom="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="下一页"
-        android:id="@+id/buttonNextActivity"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:layout_alignStart="@+id/buttonSetCityID"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="下一页"
+                android:id="@+id/buttonNextActivity"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:layout_alignStart="@+id/buttonSetCityID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="初始化"
-        android:id="@+id/buttonInit"
-        android:layout_alignParentBottom="true"
-        android:layout_toStartOf="@+id/buttonNextActivity"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="初始化"
+                android:id="@+id/buttonInit"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/buttonNextActivity"/>
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/editTextTerminalID"
-        android:hint="终端ID"
-        android:layout_below="@+id/editTextCityID"
-        android:layout_alignParentStart="true"
-        android:layout_toStartOf="@+id/buttonInit"
-        android:layout_alignBottom="@+id/buttonGetTerminalID"/>
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/editTextTerminalID"
+                android:hint="终端ID"
+                android:layout_alignBottom="@+id/buttonGetTerminalID"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetTerminalID"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="设置"
-        android:id="@+id/buttonSetTerminalID"
-        android:layout_below="@+id/editTextCityID"
-        android:layout_alignParentEnd="true"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置"
+                android:id="@+id/buttonSetTerminalID"
+                android:layout_below="@+id/editTextCityID"
+                android:layout_alignParentEnd="true"/>
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="读取"
-        android:id="@+id/buttonGetTerminalID"
-        android:layout_toStartOf="@+id/buttonSetCityID"
-        android:layout_below="@+id/buttonGetCityID"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="读取"
+                android:id="@+id/buttonGetTerminalID"
+                android:layout_toStartOf="@+id/buttonSetCityID"
+                android:layout_below="@+id/buttonGetCityID"/>
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerSetBps"
+                android:layout_alignParentStart="true"
+                android:layout_toStartOf="@+id/buttonGetTerminalID"
+                android:layout_below="@+id/editTextTerminalID"
+                android:layout_above="@+id/buttonClear"
+                android:spinnerMode="dialog"/>
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设置波特率"
+                android:id="@+id/buttonSetBps"
+                android:layout_alignBottom="@+id/spinnerSetBps"
+                android:layout_alignEnd="@+id/buttonSetTerminalID"
+                android:layout_toEndOf="@+id/spinnerSetBps"
+                android:layout_alignTop="@+id/spinnerSetBps"/>
 
 
-</RelativeLayout>
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

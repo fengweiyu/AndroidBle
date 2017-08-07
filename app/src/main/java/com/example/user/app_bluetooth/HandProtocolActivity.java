@@ -75,6 +75,12 @@ public class HandProtocolActivity extends Activity
 	private int iWorkMode=0;
 	private Button btGetWorkMode=null;
 	private Button btSetWorkMode=null;
+
+	private Spinner spnSetBps=null;
+	private static final String[] strSetBps = {"1200","2400","1200","2400","4800","9600","14400",
+	"19200","14400","19200","28800","38400","57600","64000","76800","115200","128000","230400","345600","460800","500000"}; 
+	private int iSetBps=0;
+	private Button btSetBps=null;
 	
 	private Button btGetOwnNum=null;
 	private Button btSetOwnNum=null;
@@ -251,7 +257,13 @@ public class HandProtocolActivity extends Activity
 					ClearPara();
 					break;
 				}	
-				
+				case R.id.buttonSetBps:
+				{
+					String strBps="AT+BAUD="+iSetBps+"\r\n";
+					Log.i("ParaOprListener", "SetBps:"+strBps);
+					BluetoothMsg.BleRemoteDevice.write(strBps.getBytes());
+					break;
+				}
 				default:
 				{
 					Log.i("ParaOprListener", "onClick err");
@@ -273,10 +285,27 @@ public class HandProtocolActivity extends Activity
 		@Override
 		public void onItemSelected(AdapterView<?> arg0, View arg1, int arg2, long arg3) 
 		{
-				String cardNumber = strWorkMode[arg2];
-				iWorkMode=arg2;
-				//设置显示当前选择的项
-				arg0.setVisibility(View.VISIBLE);
+			switch(arg0.getId())
+			{
+				case R.id.spinnerWorkMode:
+				{
+					String cardNumber = strWorkMode[arg2];
+					iWorkMode=arg2;
+					//设置显示当前选择的项
+					arg0.setVisibility(View.VISIBLE);	
+				break;
+				}
+				
+				case R.id.spinnerSetBps:
+				{
+					iSetBps=arg2;
+					//设置显示当前选择的项
+					arg0.setVisibility(View.VISIBLE);	
+				break;
+				}
+
+			}
+
 		}
 		@Override
 		public void onNothingSelected(AdapterView<?> arg0)
@@ -359,6 +388,14 @@ public class HandProtocolActivity extends Activity
 		btSetTerminalID = (Button) findViewById(R.id.buttonSetTerminalID);
 		btSetTerminalID.setOnClickListener(new ParaOprListener());
 		etTerminalIDView = (EditText) findViewById(R.id.editTextTerminalID);
+		
+		btSetBps = (Button) findViewById(R.id.buttonSetBps);
+		btSetBps.setOnClickListener(new ParaOprListener());
+		spnSetBps =(Spinner)findViewById(R.id.spinnerSetBps);
+		spnSetBps.setPrompt("波特率:");
+		ArrayAdapter<String> adapterSetBps=new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, strSetBps);
+		spnSetBps.setAdapter(adapterSetBps);
+		spnSetBps.setOnItemSelectedListener(new SpinnerOprListener());
 
 		btClear = (Button) findViewById(R.id.buttonClear);
 		btClear.setOnClickListener(new ParaOprListener());
